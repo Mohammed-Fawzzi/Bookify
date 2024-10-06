@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Bookify
 
-## Getting Started
+Bookify is a comprehensive site that allows you to explore a wide variety of books, search for any title, and view detailed information about each book. The site uses The New York Times API to provide rich content and display book data in a professional and engaging way. It features a modern and fully responsive user interface, making it easy to explore books across different categories.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Book Browsing: Browse and explore a vast collection of books using The New York Times API (https://developer.nytimes.com/apis).
+- Detailed Book Information: View detailed information about each book, including the author, summary, reviews, and more.
+- Interactive Interface: Sleek and engaging user interface built with Tailwind CSS, offering smooth navigation and fast interactions.
+- Responsive Design: Fully responsive design that adapts seamlessly to all screen sizes, including mobile, tablet, and desktop.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- Next.js: For building a modern, server-side rendered web application.
+- Tailwind CSS: For responsive, utility-first styling.
+- Lucide-react: For lightweight and customizable icons.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Preview
 
-## Learn More
+![Preview Image](/preview/preview.jpeg)
+![Preview Image1](/preview/preview1.jpeg)
+![Preview Image2](/preview/preview2.jpeg)
 
-To learn more about Next.js, take a look at the following resources:
+## Live Demo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Check out the live demo [here]().
