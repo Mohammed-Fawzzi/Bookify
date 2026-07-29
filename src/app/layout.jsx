@@ -1,6 +1,6 @@
 import { Fredoka } from "next/font/google";
 import "./globals.css";
-import Navbar from "./(Components)/Navbar/Navbar";
+import Navbar from "@/components/Navbar/Navbar";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
