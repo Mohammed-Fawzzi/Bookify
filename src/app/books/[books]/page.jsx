@@ -13,7 +13,13 @@ async function getBooks(listName) {
     throw new Error("Failed to fetch books");
   }
 
-  return res.json();
+  const data = await res.json();
+
+  if (data.status !== "OK" || !data.results?.books) {
+    throw new Error(data.errors?.[0] || "Book list not found");
+  }
+
+  return data;
 }
 
 export default async function Books({ params }) {

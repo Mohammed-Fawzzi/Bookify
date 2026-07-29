@@ -1,12 +1,11 @@
 import Link from "next/link";
 import React from "react";
-import { format } from "date-fns/format";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { getNytUrl } from "@/lib/nyt";
 
 async function getBookCategories() {
-  const res = await fetch(getNytUrl("/lists/names.json"), {
+  const res = await fetch(getNytUrl("/lists/overview.json"), {
     next: { revalidate: 3600 },
   });
 
@@ -14,7 +13,13 @@ async function getBookCategories() {
     throw new Error("Failed to fetch books categories");
   }
 
-  return res.json();
+  const data = await res.json();
+
+  if (data.status !== "OK" || !data.results?.lists) {
+    throw new Error(data.errors?.[0] || "Unexpected NYT API response");
+  }
+
+  return data.results.lists;
 }
 
 export default async function Categories({
@@ -25,10 +30,16 @@ export default async function Categories({
   showHeader = true,
   limit,
 }) {
-  const categories = await getBookCategories();
-  const results = limit
-    ? categories.results.slice(0, limit)
-    : categories.results;
+  let lists = [];
+  let errorMessage = "";
+
+  try {
+    lists = await getBookCategories();
+  } catch (error) {
+    errorMessage = error.message || "Could not load categories right now.";
+  }
+
+  const results = limit ? lists.slice(0, limit) : lists;
 
   return (
     <div className="container mx-auto px-6 py-5">
@@ -52,37 +63,51 @@ export default async function Categories({
         </div>
       )}
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {results.map((category) => (
-          <Link
-            href={`/books/${category.list_name_encoded}`}
-            key={category.list_name_encoded}
-            className="rounded-lg border border-slate-300 p-4 transition hover:bg-sky-100 flex flex-col"
-          >
-            <Image
-              src={`/book.jpg`}
-              alt={category.display_name}
-              width={400}
-              height={250}
-              className="rounded-lg mb-4 object-cover"
-            />
-            <h3 className="mb-4 text-lg font-bold text-sky-800">
-              {category.display_name}
-            </h3>
-            <p className="text-sm text-slate-500">
-              <span className="text-blue-600"> First published: </span>
-              {format(new Date(category.oldest_published_date), "do MMMM yyyy")}
-            </p>
-            <p className="my-2 text-sm text-slate-500">
-              <span className="text-blue-600">Last published: </span>
-              {format(new Date(category.newest_published_date), "do MMMM yyyy")}
-            </p>
-            <p className="text-sm text-slate-500">
-              <span className="text-blue-600">Updated:</span> {category.updated}
-            </p>
-          </Link>
-        ))}
-      </div>
+      {errorMessage ? (
+        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-6 text-red-700">
+          {errorMessage}
+        </p>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {results.map((category) => {
+            const cover =
+              category.books?.[0]?.book_image || "/book.jpg";
+
+            return (
+              <Link
+                href={`/books/${category.list_name_encoded}`}
+                key={category.list_name_encoded}
+                className="rounded-lg border border-slate-300 p-4 transition hover:bg-sky-100 flex flex-col"
+              >
+                <Image
+                  src={cover}
+                  alt={category.display_name}
+                  width={400}
+                  height={250}
+                  className="mb-4 h-56 w-full rounded-lg object-cover"
+                />
+                <h3 className="mb-4 text-lg font-bold text-sky-800">
+                  {category.display_name}
+                </h3>
+                <p className="text-sm text-slate-500">
+                  <span className="text-blue-600">Updated:</span>{" "}
+                  {category.updated}
+                </p>
+                <p className="my-2 text-sm text-slate-500">
+                  <span className="text-blue-600">Books in list:</span>{" "}
+                  {category.books?.length || 0}
+                </p>
+                {category.books?.[0]?.title ? (
+                  <p className="text-sm text-slate-500">
+                    <span className="text-blue-600">Top title:</span>{" "}
+                    {category.books[0].title}
+                  </p>
+                ) : null}
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
