@@ -3,11 +3,12 @@ import React from "react";
 import { format } from "date-fns/format";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { getNytUrl } from "@/lib/nyt";
 
 async function getBookCategories() {
-  const res = await fetch(
-    `${process.env.NYT_API_BASE_URL}/lists/names.json?api-key=${process.env.NYT_API_KEY}`
-  );
+  const res = await fetch(getNytUrl("/lists/names.json"), {
+    next: { revalidate: 3600 },
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch books categories");

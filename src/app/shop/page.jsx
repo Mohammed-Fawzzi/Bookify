@@ -1,5 +1,7 @@
 import Categories from "@/components/Categories/Categories";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Shop | Bookify",
   description: "Browse book categories and find your next read on Bookify.",

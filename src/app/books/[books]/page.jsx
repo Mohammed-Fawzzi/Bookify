@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { getNytUrl } from "@/lib/nyt";
 
 async function getBooks(listName) {
   const res = await fetch(
-    `${process.env.NYT_API_BASE_URL}/lists/current/${listName}.json?api-key=${process.env.NYT_API_KEY}`
+    getNytUrl(`/lists/current/${listName}.json`),
+    { next: { revalidate: 3600 } }
   );
 
   if (!res.ok) {
